@@ -1,0 +1,111 @@
+###########################################
+#                                         #
+#           Plugin made by Ember          #
+#                                         #
+###########################################
+
+enchants:
+  jackhammer:
+    name: "Jackhammer"
+    description: "Destroy a layer of the mine"
+    cost-equation: "500 * level"
+    chance-equation: "0.5 + level / 100" # Chance out of 100
+    interval: 20
+    percent: 20
+    maxlvl: 500
+    display: "&a&l{name} {level_roman}"
+  explosive:
+    name: "Explosive"
+    description: "Mine in a 3x3 area"
+    cost-equation: "1000 * level"
+    chance-equation: "level / 1000"
+    maxlvl: 1000
+    display: "&a&l{name} {level_roman}"
+  meteor:
+    name: "Meteor"
+    description: "Destory an entire mine"
+    cost-equation: "1000 * level"
+    chance-equation: "level / 5000"
+    interval: 40
+    percent: 20
+    maxlvl: 1000
+    display: "&a&l{name} {level_roman}"
+  autosell:
+    name: "Autosell"
+    description: "Automatically sell within a time interval"
+    cost-equation: "1000 * level"
+    modifier-equation: "20 + (level / 50)" # Time in ticks (20 per second)
+    chance-equation: "level / 500"
+    maxlvl: 1000
+    display: "&a&l{name} {level_roman}"
+  doubleblock:
+    name: "Double Block"
+    description: "Double your blocks mined"
+    cost-equation: "1000 * level"
+    chance-equation: "level / 500"
+    maxlvl: 1000
+    display: "&a&l{name} {level_roman}"
+  exprush:
+    name: "Exp Rush"
+    description: "Double your mining exp for a short time"
+    cost-equation: "1000 * level"
+    modifier-equation: "level * 50"
+    chance-equation: "level / 500"
+    maxlvl: 1000
+    display: "&a&l{name} {level_roman}"
+  merchant:
+    name: "Merchant"
+    description: "Gives you money while mining"
+    cost-equation: "1000 * level"
+    modifier-equation: "level * 50"
+    chance-equation: "level / 500"
+    maxlvl: 1000
+    display: "&a&l{name} {level_roman}"
+  efficiency:
+    name: "Efficiency"
+    description: "Gives you efficiency"
+    cost-equation: "500 * level"
+    modifier-equation: "level"
+    maxlvl: 1000
+    enchant: "DIG_SPEED"
+    display: "&a&l{name} {level_roman}"
+  fortune:
+    name: "Fortune"
+    description: "Gives you Fortune"
+    cost-equation: "500 * level"
+    modifier-equation: "level"
+    maxlvl: 1000
+    enchant: "LOOT_BONUS_BLOCKS"
+    display: "&a&l{name} {level_roman}"
+  unbreaking:
+    name: "Unbreaking"
+    description: "Gives you Unbreaking"
+    cost-equation: "500 * level"
+    modifier-equation: "level"
+    maxlvl: 1000
+    enchant: "DURABILITY"
+    display: "&a&l{name} {level_roman}"
+  speed:
+    name: "Speed"
+    description: "Gives you Speed"
+    cost-equation: "500 * level"
+    modifier-equation: "level"
+    maxlvl: 3
+    effect: "SPEED"
+    display: "&a&l{name} {level_roman}"
+  haste:
+    name: "Haste"
+    description: "Increase speed"
+    cost-equation: "500 * level"
+    modifier-equation: "level"
+    maxlvl: 3
+    effect: "FAST_DIGGING"
+    display: "&a&l{name} {level_roman}"
+  jumpboost:
+    name: "Jump"
+    description: "Gives you Jump Boost"
+    cost-equation: "500 * level"
+    modifier-equation: "level"
+    maxlvl: 3
+    effect: "JUMP"
+    display: "&a&l{name} {level_roman}"

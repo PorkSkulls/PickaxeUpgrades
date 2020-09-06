@@ -1,0 +1,209 @@
+###########################################
+#                                         #
+#           Plugin made by Ember          #
+#                                         #
+###########################################
+
+valid-regions:
+  - "mine"
+
+pickaxe-exp:
+  chance: 25
+  amount: 1
+
+enchant_inventory:
+  size: 54
+  title: "&a&lPurchase Enchants"
+  fillers:
+    slot: "all"
+    name: " "
+    material: stained_glass_pane
+    durability: 15
+  menuitems:
+    info:
+      personal:
+        slot: 49
+        material: skull_item
+        durability: 3
+        owner: "MHF_Question"
+        name: "&b&l{player}"
+        lore:
+          - "&f* &9Pickaxe Experience&f: &b{exp}"
+      jackhammer:
+        slot: 11
+        material: gold_spade
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      explosive:
+        slot: 12
+        material: tnt
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      meteor:
+        slot: 13
+        material: fireball
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      autosell:
+        slot: 14
+        material: eye_of_ender
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      doubleblock:
+        slot: 15
+        material: ghast_tear
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      exprush:
+        slot: 20
+        material: exp_bottle
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      merchant:
+        slot: 21
+        material: emerald
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      efficiency:
+        slot: 22
+        material: diamond_pickaxe
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      fortune:
+        slot: 23
+        material: rabbit_foot
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      unbreaking:
+        slot: 24
+        material: obsidian
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      speed:
+        slot: 30
+        material: feather
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      haste:
+        slot: 31
+        material: gold_pickaxe
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+      jumpboost:
+        slot: 32
+        material: leather_boots
+        name: "&b&lENCHANT&f: &9&l{name}"
+        lore:
+          - "&f* &bDescription&f: &9{description}"
+          - "&f* &bCost&f: &9{cost}"
+          - "&f* &bLevel&f: &9{level}"
+          - "&f* &bMax Level&f: &9{maxlevel}"
+
+purchase_inventory:
+  size: 27
+  title: "&a&lChoose Levels"
+  fillers:
+    slot: "all"
+    name: " "
+    material: stained_glass_pane
+    durability: 15
+  menuitems:
+    info:
+      enchant:
+        slot: 4
+        material: diamond_pickaxe
+        name: "&b&lEnchant&f: &9&l{name}"
+        lore:
+          - "&f* &bLevel&f: &9{level}"
+      personal:
+        slot: 22
+        material: skull_item
+        durability: 3
+        owner: "MHF_Question"
+        name: "&b&l{player}"
+        lore:
+          - "&f* &9Pickaxe Experience&f: &b{exp}"
+    purchase:
+      one:
+        slot: 11
+        price: 1
+        material: fireball
+        name: "&b&l+1 Level"
+        lore:
+          - "&f* &bCost&f: &9{cost}"
+      ten:
+        slot: 12
+        price: 10
+        material: fireball
+        name: "&b&l+10 Levels"
+        lore:
+          - "&f* &bCost&f: &9{cost}"
+      hundred:
+        slot: 13
+        price: 100
+        material: fireball
+        name: "&b&l+100 Levels"
+        lore:
+          - "&f* &bCost&f: &9{cost}"
+      fivehundred:
+        slot: 14
+        price: 500
+        material: fireball
+        name: "&b&l+500 Levels"
+        lore:
+          - "&f* &bCost&f: &9{cost}"
+      thousand:
+        slot: 15
+        price: 1000
+        material: fireball
+        name: "&b&l+1000 Levels"
+        lore:
+          - "&f* &bCost&f: &9{cost}"
