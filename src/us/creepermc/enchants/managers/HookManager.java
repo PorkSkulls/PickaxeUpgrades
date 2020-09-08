@@ -38,7 +38,7 @@ public class HookManager extends XManager {
 		deinitialize();
 		
 		regions.addAll(getCore().getConfig().getStringList("valid-regions"));
-		islandMinesManager = ((us.creepermc.mines.Core) getCore().getServer().getPluginManager().getPlugin("IslandMines")).getManager(StorageManager.class);
+		checkStorageManager();
 	}
 	
 	@Override
@@ -140,10 +140,16 @@ public class HookManager extends XManager {
 	}
 	
 	private PlayerMine getMine(Location location) {
+		checkStorageManager();
 		return islandMinesManager.getMine(location);
 	}
 	
 	private boolean isMine(Location location) {
 		return getMine(location) != null;
+	}
+	
+	private void checkStorageManager() {
+		if(islandMinesManager != null) return;
+		islandMinesManager = ((us.creepermc.mines.Core) getCore().getServer().getPluginManager().getPlugin("IslandMines")).getManager(StorageManager.class);
 	}
 }
