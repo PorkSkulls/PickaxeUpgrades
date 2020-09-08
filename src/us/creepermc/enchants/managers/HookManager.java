@@ -108,8 +108,8 @@ public class HookManager extends XManager {
 		if(!isValidLocation(location)) return locations;
 		ProtectedRegion region = getValidRegion(location);
 		if(region != null) {
-			for(int x = region.getMinimumPoint().getBlockX(); x <= region.getMaximumPoint().getBlockX(); x++)
-				for(int y = region.getMinimumPoint().getBlockY(); y <= region.getMaximumPoint().getBlockY(); y++)
+			for(int y = region.getMinimumPoint().getBlockY(); y <= region.getMaximumPoint().getBlockY(); y++)
+				for(int x = region.getMinimumPoint().getBlockX(); x <= region.getMaximumPoint().getBlockX(); x++)
 					for(int z = region.getMinimumPoint().getBlockZ(); z <= region.getMaximumPoint().getBlockZ(); z++) {
 						Location checking = new Location(location.getWorld(), x, y, z);
 						if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
@@ -118,8 +118,8 @@ public class HookManager extends XManager {
 			return locations;
 		}
 		PlayerMine mine = getMine(location);
-		for(int x = mine.getPlaced().getBlockX(); x <= mine.getPlaced().getBlockX() + mine.getMine().getSize() + 1; x++)
-			for(int y = mine.getPlaced().getBlockY(); y <= mine.getPlaced().getBlockY() + mine.getMine().getHeight() + 1; y++)
+		for(int y = mine.getPlaced().getBlockY(); y <= mine.getPlaced().getBlockY() + mine.getMine().getHeight() + 1; y++)
+			for(int x = mine.getPlaced().getBlockX(); x <= mine.getPlaced().getBlockX() + mine.getMine().getSize() + 1; x++)
 				for(int z = mine.getPlaced().getBlockZ(); z <= mine.getPlaced().getBlockZ() + mine.getMine().getSize() + 1; z++) {
 					Location checking = new Location(location.getWorld(), x, location.getY(), z);
 					if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
