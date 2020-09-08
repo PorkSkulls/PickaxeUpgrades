@@ -1,7 +1,7 @@
 name: PickaxeUpgrades
 main: us.creepermc.enchants.Core
 author: Ember
-version: Alpha-1.0.1
+version: Alpha-1.0.2
 description: Adds Custom Enchantments to the game
 website: https://ember.zone
 softdepend: [ IslandMines, PlaceholderAPI, ShopGUIPlus, Vault, WorldEdit, WorldGuard ]
