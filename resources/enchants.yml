@@ -10,8 +10,6 @@ enchants:
     description: "Destroy a layer of the mine"
     cost-equation: "500 * level"
     chance-equation: "0.5 + level / 100" # Chance out of 100
-    interval: 20
-    percent: 20
     maxlvl: 500
     display: "&a&l{name} {level_roman}"
   explosive:
@@ -26,8 +24,6 @@ enchants:
     description: "Destory an entire mine"
     cost-equation: "1000 * level"
     chance-equation: "level / 5000"
-    interval: 40
-    percent: 20
     maxlvl: 1000
     display: "&a&l{name} {level_roman}"
   autosell:

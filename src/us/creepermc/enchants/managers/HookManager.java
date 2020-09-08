@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.templates.XManager;
-import us.creepermc.enchants.utils.Files;
 import us.creepermc.enchants.utils.Util;
 import us.creepermc.mines.managers.StorageManager;
 import us.creepermc.mines.objects.PlayerMine;
@@ -81,9 +80,9 @@ public class HookManager extends XManager {
 		return locations;
 	}
 	
-	public Files.Pair<String, List<Location>> getLayer(Location location) {
+	public List<Location> getLayer(Location location) {
 		List<Location> locations = new ArrayList<>();
-		if(!isValidLocation(location)) return new Files.Pair<>("", locations);
+		if(!isValidLocation(location)) return locations;
 		ProtectedRegion region = getValidRegion(location);
 		if(region != null) {
 			for(int x = region.getMinimumPoint().getBlockX(); x <= region.getMaximumPoint().getBlockX(); x++)
@@ -92,7 +91,7 @@ public class HookManager extends XManager {
 					if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
 					locations.add(checking);
 				}
-			return new Files.Pair<>(region.getId(), locations);
+			return locations;
 		}
 		PlayerMine mine = getMine(location);
 		for(int x = mine.getPlaced().getBlockX(); x <= mine.getPlaced().getBlockX() + mine.getMine().getSize() + 1; x++)
@@ -101,12 +100,12 @@ public class HookManager extends XManager {
 				if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
 				locations.add(checking);
 			}
-		return new Files.Pair<>(mine.getOwner().toString(), locations);
+		return locations;
 	}
 	
-	public Files.Pair<String, List<Location>> getEntireMine(Location location) {
+	public List<Location> getEntireMine(Location location) {
 		List<Location> locations = new ArrayList<>();
-		if(!isValidLocation(location)) return new Files.Pair<>("", locations);
+		if(!isValidLocation(location)) return locations;
 		ProtectedRegion region = getValidRegion(location);
 		if(region != null) {
 			for(int x = region.getMinimumPoint().getBlockX(); x <= region.getMaximumPoint().getBlockX(); x++)
@@ -116,7 +115,7 @@ public class HookManager extends XManager {
 						if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
 						locations.add(checking);
 					}
-			return new Files.Pair<>(region.getId(), locations);
+			return locations;
 		}
 		PlayerMine mine = getMine(location);
 		for(int x = mine.getPlaced().getBlockX(); x <= mine.getPlaced().getBlockX() + mine.getMine().getSize() + 1; x++)
@@ -126,7 +125,7 @@ public class HookManager extends XManager {
 					if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
 					locations.add(checking);
 				}
-		return new Files.Pair<>(mine.getOwner().toString(), locations);
+		return locations;
 	}
 	
 	private ProtectedRegion getValidRegion(Location location) {

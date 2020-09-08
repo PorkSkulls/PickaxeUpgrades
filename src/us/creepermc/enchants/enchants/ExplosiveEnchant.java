@@ -3,7 +3,6 @@ package us.creepermc.enchants.enchants;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -11,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.managers.HookManager;
 import us.creepermc.enchants.objects.BlockEnchant;
+import us.creepermc.enchants.utils.BlockUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +27,14 @@ public class ExplosiveEnchant extends BlockEnchant {
 	@Override
 	public void apply(Player player, BlockBreakEvent event, int level) {
 		List<Location> locations = manager.get3x3(event.getBlock().getLocation());
-		if(locations.isEmpty()) return;
+		if(locations.size() <= 1) return;
+		ItemStack pickaxe = player.getItemInHand();
 		List<ItemStack> drops = new ArrayList<>();
 		locations.forEach(loc -> {
-			drops.addAll(loc.getBlock().getDrops(player.getItemInHand()));
-			loc.getBlock().setType(Material.AIR);
+			drops.addAll(loc.getBlock().getDrops(pickaxe));
+			BlockUtil.setBlockInNativeChunkSection(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 0, (byte) 0);
 		});
+		simplifyItems(drops);
 		drops.forEach(item -> {
 			if(player.getInventory().firstEmpty() != -1) player.getInventory().addItem(item);
 			else player.getWorld().dropItemNaturally(player.getLocation(), item);
