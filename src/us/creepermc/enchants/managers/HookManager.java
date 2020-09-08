@@ -121,7 +121,7 @@ public class HookManager extends XManager {
 		for(int y = mine.getPlaced().getBlockY(); y <= mine.getPlaced().getBlockY() + mine.getMine().getHeight() + 1; y++)
 			for(int x = mine.getPlaced().getBlockX(); x <= mine.getPlaced().getBlockX() + mine.getMine().getSize() + 1; x++)
 				for(int z = mine.getPlaced().getBlockZ(); z <= mine.getPlaced().getBlockZ() + mine.getMine().getSize() + 1; z++) {
-					Location checking = new Location(location.getWorld(), x, location.getY(), z);
+					Location checking = new Location(location.getWorld(), x, y, z);
 					if(checking.getBlock().getType() == Material.BEDROCK || checking.getBlock().getType() == Material.AIR) continue;
 					locations.add(checking);
 				}
