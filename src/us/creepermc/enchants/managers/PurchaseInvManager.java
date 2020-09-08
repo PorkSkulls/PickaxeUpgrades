@@ -58,6 +58,7 @@ public class PurchaseInvManager extends XInvManager {
 	@Override
 	public void menuItemClick(InventoryClickEvent event, MenuItem menuItem) {
 		Player player = (Player) event.getWhoClicked();
+		if(!(menuItem instanceof PurchaseItem)) return;
 		PurchaseItem purchaseItem = (PurchaseItem) menuItem;
 		Enchant enchant = getMetaEnchant(player);
 		if(enchant == null) return;
