@@ -11,26 +11,36 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import us.creepermc.enchants.Core;
+import us.creepermc.enchants.managers.StorageManager;
 import us.creepermc.enchants.objects.ValueEnchant;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExpRushEnchant extends ValueEnchant {
-	Map<UUID, Integer> tasks = new HashMap<>();
-	Core core;
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class EnergyRushEnchant extends ValueEnchant {
+	final Map<UUID, Integer> tasks = new HashMap<>();
+	final Core core;
+	StorageManager manager;
 	
-	public ExpRushEnchant(YamlConfiguration config, Core core) {
-		super(config, "exprush");
+	public EnergyRushEnchant(YamlConfiguration config, Core core) {
+		super(config, "energyrush");
 		this.core = core;
+	}
+	
+	@Override
+	public void initialize() {
+		deinitialize();
+		
+		manager = core.getManager(StorageManager.class);
 	}
 	
 	@Override
 	public void deinitialize() {
 		tasks.values().forEach(core.getServer().getScheduler()::cancelTask);
 		tasks.clear();
+		manager = null;
 	}
 	
 	@Override
@@ -48,7 +58,7 @@ public class ExpRushEnchant extends ValueEnchant {
 	public void exprush(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		if(!tasks.containsKey(player.getUniqueId())) return;
-		event.setExpToDrop(event.getExpToDrop() * 2);
+		manager.blockBreak(player.getUniqueId());
 	}
 	
 	@EventHandler

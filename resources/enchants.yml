@@ -41,9 +41,9 @@ enchants:
     chance-equation: "level / 500"
     maxlvl: 1000
     display: "&a&l{name} {level_roman}"
-  exprush:
-    name: "Exp Rush"
-    description: "Double your mining exp for a short time"
+  energyrush:
+    name: "Energy Rush"
+    description: "Double your energy for a short time"
     cost-equation: "1000 * level"
     modifier-equation: "level * 50"
     chance-equation: "level / 500"
