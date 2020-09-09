@@ -54,7 +54,7 @@ public class HookManager extends XManager {
 	public void sell(Player player, Collection<ItemStack> items) {
 		try {
 			double total = 0;
-			for(ItemStack item : items) total += ShopGuiPlusApi.getItemStackPriceBuy(player, item);
+			for(ItemStack item : items) total += ShopGuiPlusApi.getItemStackPriceSell(player, item);
 			economy.depositPlayer(player, total);
 		} catch(Exception ex) {
 		}
