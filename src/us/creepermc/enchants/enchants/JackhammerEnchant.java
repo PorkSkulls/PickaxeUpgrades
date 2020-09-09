@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.managers.HookManager;
+import us.creepermc.enchants.managers.StorageManager;
 import us.creepermc.enchants.objects.BlockEnchant;
 import us.creepermc.enchants.utils.BlockUtil;
 import us.creepermc.enchants.utils.Files;
@@ -22,17 +23,19 @@ import java.util.concurrent.CompletableFuture;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JackhammerEnchant extends BlockEnchant {
-	HookManager manager;
+	HookManager hookManager;
+	StorageManager storageManager;
 	
 	public JackhammerEnchant(YamlConfiguration config, Core core) {
 		super(config, "jackhammer");
-		manager = core.getManager(HookManager.class);
+		hookManager = core.getManager(HookManager.class);
+		storageManager = core.getManager(StorageManager.class);
 	}
 	
 	@Override
 	public void apply(Player player, BlockBreakEvent event, int level) {
 		CompletableFuture.runAsync(() -> {
-			Files.Pair<PlayerMine, List<Location>> pair = manager.getLayer(event.getBlock().getLocation());
+			Files.Pair<PlayerMine, List<Location>> pair = hookManager.getLayer(event.getBlock().getLocation());
 			List<Location> locations = pair.getValue();
 			if(locations.size() <= 1) return;
 			ItemStack pickaxe = player.getItemInHand();
@@ -41,6 +44,7 @@ public class JackhammerEnchant extends BlockEnchant {
 			locations.forEach(loc -> {
 				if(pair.getKey() == null) drops.addAll(loc.getBlock().getDrops(pickaxe));
 				else pair.getKey().addProgress();
+				storageManager.blockBreak(player.getUniqueId());
 				BlockUtil.setBlockInNativeChunkSection(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 0, (byte) 0);
 			});
 			if(pair.getKey() != null) {
@@ -53,7 +57,7 @@ public class JackhammerEnchant extends BlockEnchant {
 			simplifyItems(drops);
 			for(ItemStack item : drops) {
 				if(player.getInventory().firstEmpty() == -1) {
-					manager.getCore().sendMsg(player, "FULL_INVENTORY");
+					hookManager.getCore().sendMsg(player, "FULL_INVENTORY");
 					break;
 				}
 				player.getInventory().addItem(item);
