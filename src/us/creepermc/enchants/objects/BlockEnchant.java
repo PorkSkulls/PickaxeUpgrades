@@ -25,6 +25,11 @@ public abstract class BlockEnchant extends ChanceEnchant {
 		Map<MaterialData, Integer> amounts = new HashMap<>();
 		items.forEach(item -> amounts.put(item.getData(), amounts.getOrDefault(item.getData(), 0) + item.getAmount()));
 		items.clear();
-		amounts.forEach((type, amount) -> items.add(new ItemStack(type.getItemType(), amount, type.getData())));
+		amounts.forEach((type, amount) -> {
+			while(amount > 0) {
+				items.add(new ItemStack(type.getItemType(), Math.min(amount, type.getItemType().getMaxStackSize()), type.getData()));
+				amount -= type.getItemType().getMaxStackSize();
+			}
+		});
 	}
 }
