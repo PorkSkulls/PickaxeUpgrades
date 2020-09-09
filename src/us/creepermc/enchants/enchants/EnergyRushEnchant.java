@@ -46,9 +46,11 @@ public class EnergyRushEnchant extends ValueEnchant {
 	@Override
 	public void apply(Player player, BlockBreakEvent event, int level) {
 		if(tasks.containsKey(player.getUniqueId())) core.getServer().getScheduler().cancelTask(tasks.remove(player.getUniqueId()));
+		core.sendMsg(player, "ENERGYRUSH_ACTIVATED");
 		tasks.put(player.getUniqueId(), new BukkitRunnable() {
 			@Override
 			public void run() {
+				core.sendMsg(player, "ENERGYRUSH_DEACTIVATED");
 				tasks.remove(player.getUniqueId());
 			}
 		}.runTaskLaterAsynchronously(core, (int) getModifier(level)).getTaskId());

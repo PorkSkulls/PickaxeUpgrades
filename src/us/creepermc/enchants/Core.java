@@ -71,6 +71,10 @@ public class Core extends JavaPlugin {
 		putMsg(defMsgs, defSnds, "NOT_PICKAXE", "The item in your hand is not a pickaxe", XSound.FIZZ);
 		putMsg(defMsgs, defSnds, "MAX_LEVEL", "Your pickaxe has reached the max level of that enchant", XSound.FIZZ);
 		putMsg(defMsgs, defSnds, "FULL_INVENTORY", "Your inventory was full so the rest of your items disappeared", XSound.FIZZ);
+		putMsg(defMsgs, defSnds, "AUTOSELL_ACTIVATED", "Your autosell enchant has been activated", XSound.FIZZ);
+		putMsg(defMsgs, defSnds, "AUTOSELL_DEACTIVATED", "Your autosell enchant has been deactivated", XSound.FIZZ);
+		putMsg(defMsgs, defSnds, "ENERGYRUSH_ACTIVATED", "Your energy rush enchant has been activated", XSound.FIZZ);
+		putMsg(defMsgs, defSnds, "ENERGYRUSH_DEACTIVATED", "Your energy rush enchant has been deactivated", XSound.FIZZ);
 		getSend(Files.Messages.class).load(defMsgs);
 		getSend(Files.Sounds.class).load(defSnds);
 	}
