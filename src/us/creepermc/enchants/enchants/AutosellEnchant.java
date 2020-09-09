@@ -2,7 +2,7 @@ package us.creepermc.enchants.enchants;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.managers.HookManager;
 import us.creepermc.enchants.objects.ValueEnchant;
+import us.creepermc.enchants.utils.BlockUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +62,8 @@ public class AutosellEnchant extends ValueEnchant {
 		if(!tasks.containsKey(player.getUniqueId())) return;
 		event.setCancelled(true);
 		manager.sell(player, event.getBlock().getDrops(player.getItemInHand()));
-		event.getBlock().setType(Material.AIR);
+		Block block = event.getBlock();
+		BlockUtil.setBlockInNativeChunkSection(block.getWorld(), block.getX(), block.getY(), block.getZ(), 0, (byte) 0);
 	}
 	
 	@EventHandler
