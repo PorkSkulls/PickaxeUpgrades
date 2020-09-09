@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.objects.Enchant;
-import us.creepermc.enchants.objects.ItemPick;
 import us.creepermc.enchants.templates.XInvManager;
 import us.creepermc.enchants.utils.Files;
 import us.creepermc.enchants.utils.Util;
@@ -17,12 +16,13 @@ import us.creepermc.enchants.utils.Util;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PurchaseInvManager extends XInvManager {
 	EnchantsInvManager enchantsInvManager;
 	EnchantManager enchantManager;
-	PickaxeManager pickaxeManager;
+	StorageManager storageManager;
 	
 	public PurchaseInvManager(Core core) {
 		super(core, "purchase_inventory");
@@ -35,7 +35,7 @@ public class PurchaseInvManager extends XInvManager {
 		
 		enchantsInvManager = getCore().getManager(EnchantsInvManager.class);
 		enchantManager = getCore().getManager(EnchantManager.class);
-		pickaxeManager = getCore().getManager(PickaxeManager.class);
+		storageManager = getCore().getManager(StorageManager.class);
 	}
 	
 	@Override
@@ -43,15 +43,14 @@ public class PurchaseInvManager extends XInvManager {
 		super.deinitialize();
 		enchantsInvManager = null;
 		enchantManager = null;
-		pickaxeManager = null;
+		storageManager = null;
 	}
 	
 	public void openInventory(Player player, Enchant enchant) {
 		getCore().sendMsg(player, "OPEN_PURCHASE_INVENTORY");
 		Inventory copy = getCore().getServer().createInventory(null, getInventory().getInventory().getSize(), getInventory().getTitle());
 		copy.setContents(getInventory().getInventory().getContents());
-		ItemPick pickaxe = pickaxeManager.getItemPick(player.getItemInHand());
-		updateMenuItems(copy, player, pickaxe, enchant);
+		updateMenuItems(copy, player, enchant);
 		player.openInventory(copy);
 	}
 	
@@ -62,19 +61,19 @@ public class PurchaseInvManager extends XInvManager {
 		PurchaseItem purchaseItem = (PurchaseItem) menuItem;
 		Enchant enchant = getMetaEnchant(player);
 		if(enchant == null) return;
-		ItemPick pickaxe = pickaxeManager.getItemPick(player.getItemInHand());
+		ItemStack pick = player.getItemInHand();
+		Map<Enchant, Integer> enchants = enchantManager.getEnchants(pick);
+		long exp = storageManager.getExp(player.getUniqueId());
 		int levels = (int) purchaseItem.getPrice();
-		int price = enchant.getPrice(pickaxe, levels);
-		if(pickaxe.getExp() < price) {
+		int price = enchant.getPrice(enchants, levels);
+		if(exp < price) {
 			getCore().sendMsg(player, "NOT_ENOUGH_EXP", String.valueOf(price));
 			return;
 		}
-		ItemStack item = pickaxeManager.removeExp(player.getItemInHand(), price);
-		enchant.apply(item, pickaxe.getEnchants(), levels);
-		player.setItemInHand(item);
-		player.updateInventory();
+		storageManager.removeExp(player.getUniqueId(), price);
+		enchant.apply(pick, enchants, levels);
 		getCore().sendMsg(player, "PURCHASED", new Files.Pair<>("{enchant}", enchant.getName()), new Files.Pair<>("{level}", String.valueOf(levels)));
-		updateMenuItems(event.getInventory(), player, pickaxeManager.getItemPick(item), enchant);
+		updateMenuItems(event.getInventory(), player, enchant);
 	}
 	
 	@Override
@@ -88,18 +87,20 @@ public class PurchaseInvManager extends XInvManager {
 		}.runTask(getCore());
 	}
 	
-	private void updateMenuItems(Inventory inv, Player player, ItemPick pickaxe, Enchant enchant) {
+	private void updateMenuItems(Inventory inv, Player player, Enchant enchant) {
+		long exp = storageManager.getExp(player.getUniqueId());
+		Map<Enchant, Integer> enchants = enchantManager.getEnchants(player.getItemInHand());
 		getMenuItems().forEach(mitem -> {
 			if(mitem.getType() == MenuItemType.PURCHASE) {
 				List<Files.Pair<String, String>> placeholders = new ArrayList<>();
-				placeholders.add(new Files.Pair<>("{cost}", NumberFormat.getNumberInstance().format(enchant.getPrice(pickaxe, (int) ((PurchaseItem) mitem).getPrice()))));
+				placeholders.add(new Files.Pair<>("{cost}", NumberFormat.getNumberInstance().format(enchant.getPrice(enchants, (int) ((PurchaseItem) mitem).getPrice()))));
 				inv.setItem(mitem.getSlot(), Util.replace(mitem.getItem().clone(), placeholders));
 				return;
 			}
 			ItemStack item = mitem.getItem().clone();
 			Util.setOwner(item, player.getName());
-			item = Util.replace(item, new Files.Pair<>("{exp}", NumberFormat.getNumberInstance().format(pickaxe.getExp())), new Files.Pair<>("{player}", player.getName()));
-			item = Util.replace(item, enchant.getPlaceholders(pickaxe));
+			item = Util.replace(item, new Files.Pair<>("{exp}", NumberFormat.getNumberInstance().format(exp)), new Files.Pair<>("{player}", player.getName()));
+			item = Util.replace(item, enchant.getPlaceholders(enchants));
 			inv.setItem(mitem.getSlot(), item);
 		});
 	}

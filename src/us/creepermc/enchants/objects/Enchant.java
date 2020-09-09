@@ -79,8 +79,8 @@ public abstract class Enchant {
 		return display.contains(line);
 	}
 	
-	public int getPrice(ItemPick pickaxe, int levels) {
-		int level = pickaxe.getEnchants().getOrDefault(this, 0);
+	public int getPrice(Map<Enchant, Integer> enchants, int levels) {
+		int level = enchants.getOrDefault(this, 0);
 		double totalPrice = 0;
 		for(int i = level + 1; i <= level + levels; i++) {
 			if(i > maxLvl) break;
@@ -89,9 +89,9 @@ public abstract class Enchant {
 		return (int) totalPrice;
 	}
 	
-	public List<Files.Pair<String, String>> getPlaceholders(ItemPick pickaxe) {
+	public List<Files.Pair<String, String>> getPlaceholders(Map<Enchant, Integer> enchants) {
 		List<Files.Pair<String, String>> placeholders = new ArrayList<>(getPlaceholders());
-		int level = pickaxe.getEnchants().getOrDefault(this, 0);
+		int level = enchants.getOrDefault(this, 0);
 		placeholders.add(new Files.Pair<>("{level}", NumberFormat.getNumberInstance().format(level)));
 		placeholders.add(new Files.Pair<>("{cost}", level == maxLvl ? "N/A" : NumberFormat.getNumberInstance().format(getCost(level + 1))));
 		return placeholders;

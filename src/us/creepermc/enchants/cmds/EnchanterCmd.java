@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.managers.EnchantManager;
-import us.creepermc.enchants.managers.PickaxeManager;
 import us.creepermc.enchants.objects.Enchant;
 import us.creepermc.enchants.templates.XCommand;
 import us.creepermc.enchants.utils.Files;
@@ -15,7 +14,6 @@ import us.creepermc.enchants.utils.Util;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EnchanterCmd extends XCommand {
 	EnchantManager enchantManager;
-	PickaxeManager pickaxeManager;
 	
 	public EnchanterCmd(Core core) {
 		super(core);
@@ -23,16 +21,12 @@ public class EnchanterCmd extends XCommand {
 	
 	@Override
 	public void initialize() {
-		deinitialize();
-		
 		enchantManager = getCore().getManager(EnchantManager.class);
-		pickaxeManager = getCore().getManager(PickaxeManager.class);
 	}
 	
 	@Override
 	public void deinitialize() {
 		enchantManager = null;
-		pickaxeManager = null;
 	}
 	
 	@Override
@@ -58,7 +52,7 @@ public class EnchanterCmd extends XCommand {
 				return;
 			}
 			int level = args.length > 2 && Util.isInt(args[2]) ? Math.max(Math.min(Integer.parseInt(args[2]), enchant.getMaxLvl()), enchant.getMinLvl()) : enchant.getMinLvl();
-			enchant.apply(player.getItemInHand(), pickaxeManager.getItemPick(player.getItemInHand()).getEnchants(), level);
+			enchant.apply(player.getItemInHand(), enchantManager.getEnchants(player.getItemInHand()), level);
 			player.updateInventory();
 			getCore().sendMsg(player, "ADDED_ENCHANT",
 					new Files.Pair<>("{enchant}", enchant.getName()),

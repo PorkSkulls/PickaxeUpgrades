@@ -2,18 +2,16 @@ package us.creepermc.enchants.listeners;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 import us.creepermc.enchants.Core;
-import us.creepermc.enchants.managers.PickaxeManager;
+import us.creepermc.enchants.managers.StorageManager;
 import us.creepermc.enchants.templates.XListener;
-import us.creepermc.enchants.utils.Util;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExpListener extends XListener {
-	PickaxeManager pickaxeManager;
+	StorageManager storageManager;
 	
 	public ExpListener(Core core) {
 		super(core);
@@ -21,21 +19,16 @@ public class ExpListener extends XListener {
 	
 	@Override
 	public void initialize() {
-		deinitialize();
-		
-		pickaxeManager = getCore().getManager(PickaxeManager.class);
+		storageManager = getCore().getManager(StorageManager.class);
 	}
 	
 	@Override
 	public void deinitialize() {
-		pickaxeManager = null;
+		storageManager = null;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void mine(BlockBreakEvent event) {
-		Player player = event.getPlayer();
-		ItemStack pickaxe = player.getItemInHand();
-		if(pickaxe == null || !Util.isPickaxe(pickaxe.getType())) return;
-		player.setItemInHand(pickaxeManager.blockBreak(pickaxe));
+		storageManager.blockBreak(event.getPlayer().getUniqueId());
 	}
 }
