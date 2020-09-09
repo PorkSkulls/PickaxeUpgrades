@@ -30,12 +30,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.cmds.EnchanterCmd;
+import us.creepermc.enchants.cmds.EnergyCmd;
 import us.creepermc.enchants.cmds.UpgradeCmd;
-import us.creepermc.enchants.listeners.EnchantApplyListener;
-import us.creepermc.enchants.listeners.EnchantListener;
-import us.creepermc.enchants.listeners.ExpListener;
-import us.creepermc.enchants.listeners.PickaxeListener;
+import us.creepermc.enchants.listeners.*;
 import us.creepermc.enchants.managers.*;
+import us.creepermc.enchants.objects.EnergyVoucher;
 import us.creepermc.enchants.templates.XCommand;
 import us.creepermc.enchants.templates.XListener;
 
@@ -400,17 +399,20 @@ public class Util {
 						return;
 					}
 					c.getManagers().addAll(Arrays.asList(
+							new EnergyVoucher(c),
 							new EnchantManager(c),
 							new EnchantsInvManager(c),
 							new HookManager(c),
 							new PurchaseInvManager(c),
 							new StorageManager(c),
 							new EnchanterCmd(c),
+							new EnergyCmd(c),
 							new UpgradeCmd(c),
 							new EnchantApplyListener(c),
 							new EnchantListener(c),
 							new ExpListener(c),
-							new PickaxeListener(c)
+							new PickaxeListener(c),
+							new VoucherListener(c)
 					));
 					c.getManagers().forEach(manager -> {
 						if(manager instanceof XCommand) c.getCommand(((XCommand) manager).getCommand()).setExecutor((XCommand) manager);
@@ -658,6 +660,26 @@ public class Util {
 			if(!Pattern.compile(cmeta.getLore().get(i)).matcher(meta2.getLore().get(i)).matches())
 				return false;
 		return true;
+	}
+	
+	public static String getPlaceholder(ItemStack item, ItemStack original, String placeholder) {
+		ItemMeta meta = original.getItemMeta();
+		if(meta.hasDisplayName() && meta.getDisplayName().contains(placeholder)) {
+			int index = meta.getDisplayName().indexOf(placeholder);
+			String after = meta.getDisplayName().substring(index + placeholder.length());
+			String name = item.getItemMeta().getDisplayName();
+			return name.substring(index).replace(after, "");
+		} else if(meta.hasLore()) {
+			for(int i = 0; i < meta.getLore().size(); i++) {
+				String phString = meta.getLore().get(i);
+				if(!phString.contains(placeholder)) continue;
+				int index = phString.indexOf(placeholder);
+				String after = phString.substring(index + placeholder.length());
+				String lore = item.getItemMeta().getLore().get(i);
+				return lore.substring(index).replace(after, "");
+			}
+		}
+		return "";
 	}
 	
 	public static String s2(String s2) {

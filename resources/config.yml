@@ -4,6 +4,14 @@
 #                                         #
 ###########################################
 
+energy-voucher:
+  material: 351
+  durability: 11
+  glow: true
+  name: "&e&l{amount} Energy Voucher"
+  lore:
+    - "&7&oRight click this to redeem"
+
 valid-regions:
   - "mine"
 

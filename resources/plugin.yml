@@ -9,6 +9,9 @@ commands:
   enchanter:
     description: Main Command - PickaxeUpgrades
     aliases: [ xenchanter, ce ]
+  energy:
+    description: Energy Command - PickaxeUpgrades
+    aliases: [ xenergy ]
   upgrade:
     description: Upgrade your Pickaxe - PickaxeUpgrades
     aliases: [ xupgrade, upgradepickaxe, upgradepick, upgrades ]
