@@ -49,9 +49,12 @@ public class ExplosiveEnchant extends BlockEnchant {
 		}
 		if(drops.isEmpty()) return;
 		simplifyItems(drops);
-		drops.forEach(item -> {
-			if(player.getInventory().firstEmpty() != -1) player.getInventory().addItem(item);
-			else player.getWorld().dropItemNaturally(player.getLocation(), item);
-		});
+		for(ItemStack item : drops) {
+			if(player.getInventory().firstEmpty() == -1) {
+				manager.getCore().sendMsg(player, "FULL_INVENTORY");
+				break;
+			}
+			player.getInventory().addItem(item);
+		}
 	}
 }

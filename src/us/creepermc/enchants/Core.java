@@ -70,6 +70,7 @@ public class Core extends JavaPlugin {
 		putMsg(defMsgs, defSnds, "REMOVED_ENCHANT", "You have removed {enchant} from your pickaxe", XSound.ORB_PICKUP);
 		putMsg(defMsgs, defSnds, "NOT_PICKAXE", "The item in your hand is not a pickaxe", XSound.FIZZ);
 		putMsg(defMsgs, defSnds, "MAX_LEVEL", "Your pickaxe has reached the max level of that enchant", XSound.FIZZ);
+		putMsg(defMsgs, defSnds, "FULL_INVENTORY", "Your inventory was full so the rest of your items disappeared", XSound.FIZZ);
 		getSend(Files.Messages.class).load(defMsgs);
 		getSend(Files.Sounds.class).load(defSnds);
 	}
