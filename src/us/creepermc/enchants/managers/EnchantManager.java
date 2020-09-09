@@ -50,7 +50,7 @@ public class EnchantManager extends XManager {
 					if(config.isSet("enchants.jumpboost")) enchants.add(new JumpBoostEnchant(config));
 				}
 				enchants.forEach(enchant -> {
-					if(enchant.getClass().isAssignableFrom(Listener.class))
+					if(Listener.class.isAssignableFrom(enchant.getClass()))
 						getCore().getServer().getPluginManager().registerEvents((Listener) enchant, getCore());
 					enchant.initialize();
 				});
