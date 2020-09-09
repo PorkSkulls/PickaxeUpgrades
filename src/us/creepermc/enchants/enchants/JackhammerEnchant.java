@@ -4,11 +4,11 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import us.creepermc.enchants.Core;
 import us.creepermc.enchants.managers.HookManager;
 import us.creepermc.enchants.objects.BlockEnchant;
@@ -35,6 +35,7 @@ public class JackhammerEnchant extends BlockEnchant {
 		if(locations.size() <= 1) return;
 		ItemStack pickaxe = player.getItemInHand();
 		List<ItemStack> drops = new ArrayList<>();
+		MaterialData data = locations.get(0).getBlock().getState().getData();
 		locations.forEach(loc -> {
 			if(pair.getKey() == null) drops.addAll(loc.getBlock().getDrops(pickaxe));
 			else pair.getKey().addProgress();
@@ -42,10 +43,9 @@ public class JackhammerEnchant extends BlockEnchant {
 		});
 		if(pair.getKey() != null) {
 			PlayerMine mine = pair.getKey();
-			Block block = locations.get(0).getBlock();
-			boolean redstoneMatch = block.getType() == Material.GLOWING_REDSTONE_ORE && mine.getUpgrade().getData().getItemType() == Material.REDSTONE_ORE;
-			if(!block.getState().getData().equals(mine.getUpgrade().getData()) && !redstoneMatch) return;
-			mine.addStorage(redstoneMatch ? mine.getUpgrade().getData() : block.getState().getData(), locations.size());
+			boolean redstoneMatch = data.getItemType() == Material.GLOWING_REDSTONE_ORE && mine.getUpgrade().getData().getItemType() == Material.REDSTONE_ORE;
+			if(!data.equals(mine.getUpgrade().getData()) && !redstoneMatch) return;
+			mine.addStorage(redstoneMatch ? mine.getUpgrade().getData() : data, locations.size());
 		}
 		if(drops.isEmpty()) return;
 		simplifyItems(drops);
