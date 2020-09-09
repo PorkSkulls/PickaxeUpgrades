@@ -30,7 +30,7 @@ enchants:
     name: "Autosell"
     description: "Automatically sell within a time interval"
     cost-equation: "1000 * level"
-    modifier-equation: "20 + (level / 50)" # Time in ticks (20 per second)
+    modifier-equation: "20 + (level / 20) * 20" # Time in ticks (20 per second)
     chance-equation: "level / 500"
     maxlvl: 1000
     display: "&a&l{name} {level_roman}"
@@ -45,7 +45,7 @@ enchants:
     name: "Energy Rush"
     description: "Double your energy for a short time"
     cost-equation: "1000 * level"
-    modifier-equation: "20 + (level / 50)"
+    modifier-equation: "20 + (level / 20) * 20"
     chance-equation: "level / 500"
     maxlvl: 1000
     display: "&a&l{name} {level_roman}"
