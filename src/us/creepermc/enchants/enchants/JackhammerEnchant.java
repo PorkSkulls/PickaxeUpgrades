@@ -18,6 +18,7 @@ import us.creepermc.mines.objects.PlayerMine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JackhammerEnchant extends BlockEnchant {
@@ -30,31 +31,33 @@ public class JackhammerEnchant extends BlockEnchant {
 	
 	@Override
 	public void apply(Player player, BlockBreakEvent event, int level) {
-		Files.Pair<PlayerMine, List<Location>> pair = manager.getLayer(event.getBlock().getLocation());
-		List<Location> locations = pair.getValue();
-		if(locations.size() <= 1) return;
-		ItemStack pickaxe = player.getItemInHand();
-		List<ItemStack> drops = new ArrayList<>();
-		MaterialData data = locations.get(0).getBlock().getState().getData();
-		locations.forEach(loc -> {
-			if(pair.getKey() == null) drops.addAll(loc.getBlock().getDrops(pickaxe));
-			else pair.getKey().addProgress();
-			BlockUtil.setBlockInNativeChunkSection(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 0, (byte) 0);
-		});
-		if(pair.getKey() != null) {
-			PlayerMine mine = pair.getKey();
-			boolean redstoneMatch = data.getItemType() == Material.GLOWING_REDSTONE_ORE && mine.getUpgrade().getData().getItemType() == Material.REDSTONE_ORE;
-			if(!data.equals(mine.getUpgrade().getData()) && !redstoneMatch) return;
-			mine.addStorage(redstoneMatch ? mine.getUpgrade().getData() : data, locations.size());
-		}
-		if(drops.isEmpty()) return;
-		simplifyItems(drops);
-		for(ItemStack item : drops) {
-			if(player.getInventory().firstEmpty() == -1) {
-				manager.getCore().sendMsg(player, "FULL_INVENTORY");
-				break;
+		CompletableFuture.runAsync(() -> {
+			Files.Pair<PlayerMine, List<Location>> pair = manager.getLayer(event.getBlock().getLocation());
+			List<Location> locations = pair.getValue();
+			if(locations.size() <= 1) return;
+			ItemStack pickaxe = player.getItemInHand();
+			List<ItemStack> drops = new ArrayList<>();
+			MaterialData data = locations.get(0).getBlock().getState().getData();
+			locations.forEach(loc -> {
+				if(pair.getKey() == null) drops.addAll(loc.getBlock().getDrops(pickaxe));
+				else pair.getKey().addProgress();
+				BlockUtil.setBlockInNativeChunkSection(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), 0, (byte) 0);
+			});
+			if(pair.getKey() != null) {
+				PlayerMine mine = pair.getKey();
+				boolean redstoneMatch = data.getItemType() == Material.GLOWING_REDSTONE_ORE && mine.getUpgrade().getData().getItemType() == Material.REDSTONE_ORE;
+				if(!data.equals(mine.getUpgrade().getData()) && !redstoneMatch) return;
+				mine.addStorage(redstoneMatch ? mine.getUpgrade().getData() : data, locations.size());
 			}
-			player.getInventory().addItem(item);
-		}
+			if(drops.isEmpty()) return;
+			simplifyItems(drops);
+			for(ItemStack item : drops) {
+				if(player.getInventory().firstEmpty() == -1) {
+					manager.getCore().sendMsg(player, "FULL_INVENTORY");
+					break;
+				}
+				player.getInventory().addItem(item);
+			}
+		});
 	}
 }
