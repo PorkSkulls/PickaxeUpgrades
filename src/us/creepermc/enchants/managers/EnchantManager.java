@@ -39,7 +39,7 @@ public class EnchantManager extends XManager {
 					if(config.isSet("enchants.explosive")) enchants.add(new ExplosiveEnchant(config, getCore()));
 					if(config.isSet("enchants.meteor")) enchants.add(new MeteorEnchant(config, getCore()));
 					if(config.isSet("enchants.autosell")) enchants.add(new AutosellEnchant(config, getCore()));
-					if(config.isSet("enchants.doubleblock")) enchants.add(new DoubleBlockEnchant(config));
+					if(config.isSet("enchants.doubleblock")) enchants.add(new DoubleBlockEnchant(config, getCore()));
 					if(config.isSet("enchants.exprush")) enchants.add(new ExpRushEnchant(config, getCore()));
 					if(config.isSet("enchants.merchant")) enchants.add(new MerchantEnchant(config, getCore()));
 					if(config.isSet("enchants.efficiency")) enchants.add(new EfficiencyEnchant(config));

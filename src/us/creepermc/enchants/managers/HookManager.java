@@ -140,12 +140,12 @@ public class HookManager extends XManager {
 		return getValidRegion(location) != null;
 	}
 	
-	private PlayerMine getMine(Location location) {
+	public PlayerMine getMine(Location location) {
 		checkStorageManager();
 		return islandMinesManager.getMine(location);
 	}
 	
-	private boolean isMine(Location location) {
+	public boolean isMine(Location location) {
 		return getMine(location) != null;
 	}
 	
