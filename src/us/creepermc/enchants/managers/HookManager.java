@@ -51,13 +51,17 @@ public class HookManager extends XManager {
 		economy.depositPlayer(player, amount);
 	}
 	
-	public void sell(Player player, Collection<ItemStack> items) {
+	public void sellItems(Player player, Collection<ItemStack> items) {
 		try {
 			double total = 0;
 			for(ItemStack item : items) total += ShopGuiPlusApi.getItemStackPriceSell(player, item);
 			economy.depositPlayer(player, total);
 		} catch(Exception ex) {
 		}
+	}
+	
+	public void sellPlayerMine(PlayerMine mine, Player player) {
+		islandMinesManager.sellStorage(mine, player);
 	}
 	
 	public boolean isValidLocation(Location location) {

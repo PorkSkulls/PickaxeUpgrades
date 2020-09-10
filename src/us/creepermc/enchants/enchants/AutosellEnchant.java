@@ -63,9 +63,10 @@ public class AutosellEnchant extends ValueEnchant {
 		Player player = event.getPlayer();
 		if(!tasks.containsKey(player.getUniqueId())) return;
 		event.setCancelled(true);
-		manager.sell(player, event.getBlock().getDrops(player.getItemInHand()));
+		manager.sellItems(player, event.getBlock().getDrops(player.getItemInHand()));
 		Block block = event.getBlock();
 		BlockUtil.setBlockInNativeChunkSection(block.getWorld(), block.getX(), block.getY(), block.getZ(), 0, (byte) 0);
+		if(manager.isMine(block.getLocation())) manager.sellPlayerMine(manager.getMine(block.getLocation()), player);
 	}
 	
 	@EventHandler
