@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public abstract class Enchant {
 	String id;
 	ConfigurationSection section;
+	boolean enabled;
 	String name;
 	String description;
 	List<Double> costs;
@@ -37,6 +38,7 @@ public abstract class Enchant {
 	public Enchant(YamlConfiguration config, String id) {
 		this.id = id;
 		section = config.getConfigurationSection("enchants." + id);
+		enabled = section.getBoolean("enabled");
 		name = section.getString("name");
 		description = section.getString("description");
 		costs = new ArrayList<>();

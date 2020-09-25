@@ -39,6 +39,7 @@ public class EnchantListener extends XListener {
 		if(player.getItemInHand() == null || !Util.isPickaxe(player.getItemInHand().getType())) return;
 		Map<Enchant, Integer> enchants = enchantManager.getEnchants(player.getItemInHand());
 		enchants.forEach((enchant, level) -> {
+			if(!enchant.isEnabled()) return;
 			if(!(enchant instanceof BlockEnchant)) return;
 			if(!((ChanceEnchant) enchant).pass(level)) return;
 			((BlockEnchant) enchant).apply(player, event, level);

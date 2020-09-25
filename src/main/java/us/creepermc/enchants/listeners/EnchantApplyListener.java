@@ -73,11 +73,13 @@ public class EnchantApplyListener extends XListener {
 	private void applyEnchantChanges(Player player, ItemStack oldItem, ItemStack newItem) {
 		if((oldItem == null || oldItem.getType() == Material.AIR) && (newItem == null || newItem.getType() == Material.AIR)) return;
 		if(oldItem != null && oldItem.getType() != Material.AIR) {
-			manager.getEnchants(oldItem).entrySet().stream().filter(entry -> entry.getKey() instanceof EffectEnchant).forEach(entry -> ((EffectEnchant) entry.getKey()).remove(player));
+			manager.getEnchants(oldItem).entrySet().stream()
+					.filter(entry -> entry.getKey() instanceof EffectEnchant && entry.getKey().isEnabled())
+					.forEach(entry -> ((EffectEnchant) entry.getKey()).remove(player));
 		}
 		if(newItem != null && newItem.getType() != Material.AIR) {
 			manager.getEnchants(newItem).entrySet().stream()
-					.filter(entry -> entry.getKey() instanceof EffectEnchant)
+					.filter(entry -> entry.getKey() instanceof EffectEnchant && entry.getKey().isEnabled())
 					.forEach(entry -> ((EffectEnchant) entry.getKey()).apply(player, entry.getValue()));
 		}
 	}

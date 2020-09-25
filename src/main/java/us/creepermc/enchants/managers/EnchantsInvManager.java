@@ -61,6 +61,7 @@ public class EnchantsInvManager extends XInvManager {
 				copy.setItem(mitem.getSlot(), item);
 				return;
 			}
+			if(!enchant.isEnabled()) return;
 			copy.setItem(mitem.getSlot(), Util.replace(mitem.getItem().clone(), enchant.getPlaceholders(enchantManager.getEnchants(player.getItemInHand()))));
 		});
 		player.openInventory(copy);

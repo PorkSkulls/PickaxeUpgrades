@@ -31,29 +31,34 @@ public class EnchantManager extends XManager {
 		deinitialize();
 		
 		YamlConfiguration config = Files.getConfiguration(Files.getFile(getCore(), "enchants.yml", true));
+		if(!config.isConfigurationSection("enchants")) return;
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if(config.isConfigurationSection("enchants")) {
-					if(config.isSet("enchants.jackhammer")) enchants.add(new JackhammerEnchant(config, getCore()));
-					if(config.isSet("enchants.explosive")) enchants.add(new ExplosiveEnchant(config, getCore()));
-					if(config.isSet("enchants.meteor")) enchants.add(new MeteorEnchant(config, getCore()));
-					if(config.isSet("enchants.autosell")) enchants.add(new AutosellEnchant(config, getCore()));
-					if(config.isSet("enchants.doubleblock")) enchants.add(new DoubleBlockEnchant(config, getCore()));
-					if(config.isSet("enchants.energyrush")) enchants.add(new EnergyRushEnchant(config, getCore()));
-					if(config.isSet("enchants.merchant")) enchants.add(new MerchantEnchant(config, getCore()));
-					if(config.isSet("enchants.efficiency")) enchants.add(new EfficiencyEnchant(config));
-					if(config.isSet("enchants.fortune")) enchants.add(new FortuneEnchant(config));
-					if(config.isSet("enchants.unbreaking")) enchants.add(new UnbreakingEnchant(config));
-					if(config.isSet("enchants.speed")) enchants.add(new SpeedEnchant(config));
-					if(config.isSet("enchants.haste")) enchants.add(new HasteEnchant(config));
-					if(config.isSet("enchants.jumpboost")) enchants.add(new JumpBoostEnchant(config));
-				}
+				if(config.isSet("enchants.jackhammer")) enchants.add(new JackhammerEnchant(config, getCore()));
+				if(config.isSet("enchants.explosive")) enchants.add(new ExplosiveEnchant(config, getCore()));
+				if(config.isSet("enchants.meteor")) enchants.add(new MeteorEnchant(config, getCore()));
+				if(config.isSet("enchants.autosell")) enchants.add(new AutosellEnchant(config, getCore()));
+				if(config.isSet("enchants.doubleblock")) enchants.add(new DoubleBlockEnchant(config, getCore()));
+				if(config.isSet("enchants.energyrush")) enchants.add(new EnergyRushEnchant(config, getCore()));
+				if(config.isSet("enchants.merchant")) enchants.add(new MerchantEnchant(config, getCore()));
+				if(config.isSet("enchants.efficiency")) enchants.add(new EfficiencyEnchant(config));
+				if(config.isSet("enchants.fortune")) enchants.add(new FortuneEnchant(config));
+				if(config.isSet("enchants.unbreaking")) enchants.add(new UnbreakingEnchant(config));
+				if(config.isSet("enchants.speed")) enchants.add(new SpeedEnchant(config));
+				if(config.isSet("enchants.haste")) enchants.add(new HasteEnchant(config));
+				if(config.isSet("enchants.jumpboost")) enchants.add(new JumpBoostEnchant(config));
+				List<Enchant> remove = new ArrayList<>();
 				enchants.forEach(enchant -> {
+					if(!enchant.isEnabled()) {
+						remove.add(enchant);
+						return;
+					}
 					if(Listener.class.isAssignableFrom(enchant.getClass()))
 						getCore().getServer().getPluginManager().registerEvents((Listener) enchant, getCore());
 					enchant.initialize();
 				});
+				enchants.removeAll(remove);
 			}
 		}.runTaskAsynchronously(getCore());
 	}
