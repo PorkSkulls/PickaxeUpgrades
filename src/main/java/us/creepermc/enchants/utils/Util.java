@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,56 +12,27 @@ import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import us.creepermc.enchants.Core;
-import us.creepermc.enchants.cmds.EnchanterCmd;
-import us.creepermc.enchants.cmds.EnergyCmd;
-import us.creepermc.enchants.cmds.UpgradeCmd;
-import us.creepermc.enchants.listeners.*;
-import us.creepermc.enchants.managers.*;
-import us.creepermc.enchants.objects.EnergyVoucher;
-import us.creepermc.enchants.templates.XCommand;
-import us.creepermc.enchants.templates.XListener;
 
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
-import java.lang.reflect.Field;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Util {
-	public static Cipher e;
-	public static Cipher d;
-	
-	// � \u00BB |
 	public static ItemStack createHead(String owner, String name, String... lore) {
 		ItemStack item = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
@@ -129,10 +99,6 @@ public class Util {
 		inv.addItem(clone);
 	}
 	
-	public static BufferedReader a(InputStream a) {
-		return new BufferedReader(new InputStreamReader(a, c()));
-	}
-	
 	public static String caps(String string) {
 		String[] list = string.split("_");
 		StringBuilder s = new StringBuilder();
@@ -145,9 +111,6 @@ public class Util {
 		return amt >= args.length ? "" : String.join(" ", Arrays.copyOfRange(args, amt, args.length));
 	}
 	
-	public static byte[] r(String d) throws Exception {
-		return e.doFinal(d.getBytes());
-	}
 	
 	public static String removeArgs(String string, int amt) {
 		return removeArgs(string.split(" "), amt);
@@ -200,10 +163,6 @@ public class Util {
 		} catch(Exception ex) {
 			return Material.getMaterial(s);
 		}
-	}
-	
-	public static Integer q(String q) {
-		return Integer.parseInt(q);
 	}
 	
 	public static Enchantment getEnchantment(String s) {
@@ -300,10 +259,6 @@ public class Util {
 		}
 	}
 	
-	public static String x() throws Exception {
-		return InetAddress.getLocalHost().getHostAddress();
-	}
-	
 	public static PotionEffectType getPotionEffect(String s) {
 		PotionEffectType type = PotionEffectType.getByName(s.toUpperCase());
 		if(type != null)
@@ -358,75 +313,6 @@ public class Util {
 		}
 	}
 	
-	// TODO: Register commands and listeners
-	public static void registerHooks(JavaPlugin plugin) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					System.setProperty(s2("//5oAHQAdABwAC4AYQBnAGUAbgB0AA=="), s2("//5DAGgAcgBvAG0AZQA="));
-					f(e = b(s2("/v8ARABFAFMALwBDAEIAQwAvAFAASwBDAFMANQBQAGEAZABkAGkAbgBn")), q(s("MQ==")));
-					f(d = b(s("REVTL0NCQy9QS0NTNVBhZGRpbmc=")), q(s2("/v8AMg==")));
-					byte[] a = r(s2("AFAATABXAFQALQBSAEYAVgBUAC0AQQBQAEsAVAAtAFQAWQBOAE8="));
-					String s = a(d(s2("//5oAHQAdABwAHMAOgAvAC8AZQBtAGIAZQByAC4AegBvAG4AZQAvAHYAZQByAGkAZgB5AC8APwB2AD0AJQAmAGMAPQAlACYAcwA9ACUAJgB0AD0AJQAmAGgAPQAlACYAYQA9ACUA")
-							.replaceFirst("%", plugin.getDescription().getName()).replaceFirst("%", x()).replaceFirst("%", p(a))
-							.replaceFirst("%", String.valueOf(System.currentTimeMillis())).replaceFirst("%", plugin.getDescription().getVersion()).replaceFirst("%", v(g(plugin))))).readLine();
-					Core c = (Core) plugin;
-					c.setAllowed(s);
-					if(!"true".equals(s)) {
-						c.getServer().getConsoleSender().sendMessage(color(s2("//4mADgAJgBtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAA==")));
-						c.getServer().getConsoleSender().sendMessage(color(" &e&l" + c.getDescription().getName() + " &ev" + c.getDescription().getVersion()));
-						String error;
-						switch(s.hashCode()) {
-							case 3392903:
-								error = s("IzEwMg==");
-								break;
-							case 270940796:
-								error = s("IzEwMw==");
-								break;
-							case 104492:
-								error = s("IzEwNA==");
-								break;
-							case 1536908355:
-								error = s("IzEwNQ==");
-								break;
-							default:
-								error = s("IzEwMQ==");
-								break;
-						}
-						c.getServer().getConsoleSender().sendMessage(color(s2("//4gACYANgAmAGwATABpAGMAZQBuAHMAZQAgAEUAcgByAG8AcgAmADYAOgAgACYAYwA=") + error));
-						c.getServer().getConsoleSender().sendMessage(color(s2("//4mADgAJgBtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAC0ALQAtAA==")));
-						return;
-					}
-					c.getManagers().addAll(Arrays.asList(
-							new EnergyVoucher(c),
-							new EnchantManager(c),
-							new EnchantsInvManager(c),
-							new HookManager(c),
-							new PurchaseInvManager(c),
-							new StorageManager(c),
-							new EnchanterCmd(c),
-							new EnergyCmd(c),
-							new UpgradeCmd(c),
-							new EnchantApplyListener(c),
-							new EnchantListener(c),
-							new ExpListener(c),
-							new PickaxeListener(c),
-							new VoucherListener(c)
-					));
-					c.getManagers().forEach(manager -> {
-						if(manager instanceof XCommand) c.getCommand(((XCommand) manager).getCommand()).setExecutor((XCommand) manager);
-						if(manager instanceof XListener) c.getServer().getPluginManager().registerEvents((XListener) manager, c);
-						manager.initialize();
-					});
-				} catch(Exception ex) {
-					ex.printStackTrace();
-					((Core) plugin).setAllowed("null");
-				}
-			}
-		}.runTaskAsynchronously(plugin);
-	}
-	
 	public static Location stringToLocation(String s) {
 		if(s == null || s.isEmpty())
 			return null;
@@ -458,11 +344,6 @@ public class Util {
 		}
 	}
 	
-	private static String g(JavaPlugin c) {
-		return c.getClass().getClassLoader().getResource(c.getClass().getName().replace('.', '/') + ".class").getPath()
-				.substring(5).split("!")[0];
-	}
-	
 	public static String simpleLocationToString(Location l) {
 		try {
 			return l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
@@ -473,10 +354,6 @@ public class Util {
 	
 	public static double round(double num) {
 		return (int) (num * 100) / 100.0;
-	}
-	
-	public static String p(byte[] p) throws Exception {
-		return new String(d.doFinal(p));
 	}
 	
 	public static ItemStack getItem(FileConfiguration config, String path) {
@@ -517,8 +394,10 @@ public class Util {
 		List<String> list;
 		if(!(list = config.getStringList(path + "lore")).isEmpty())
 			meta.setLore(list.stream().map(Util::color).map(StringEscapeUtils::unescapeJava).collect(Collectors.toList()));
-		if(config.getBoolean(path + "glow"))
-			meta.addEnchant(EnchantGlow.getGlow(), 1, true);
+		if(config.getBoolean(path + "glow")) {
+			meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		}
 		if(!(list = config.getStringList(path + "enchants")).isEmpty())
 			list.stream().filter(s -> getEnchantment(s.split(",")[0]) != null)
 					.forEach(s -> meta.addEnchant(getEnchantment(s.split(",")[0]),
@@ -572,25 +451,6 @@ public class Util {
 		return replace(item, Arrays.asList(pairs));
 	}
 	
-	private static String v(String b) throws IOException, NoSuchAlgorithmException {
-		try {
-			return DigestUtils.md5Hex(new FileInputStream(new File(URLDecoder.decode(b, "UTF-8"))));
-		} catch(Exception | Error e) {
-			MessageDigest l = MessageDigest.getInstance("MD5");
-			FileInputStream w = new FileInputStream(new File(URLDecoder.decode(b, "UTF-8")));
-			byte[] u = new byte[1024];
-			int c;
-			while((c = w.read(u)) != -1)
-				l.update(u, 0, c);
-			w.close();
-			byte[] a = l.digest();
-			StringBuilder t = new StringBuilder();
-			for(byte n : a)
-				t.append(Integer.toString((n & 0xff) + 0x100, 16).substring(1));
-			return t.toString();
-		}
-	}
-	
 	public static ItemStack replaceAll(ItemStack item, String old, String now) {
 		if(item == null)
 			return null;
@@ -612,12 +472,6 @@ public class Util {
 			item.addEnchantments(item2.getEnchantments());
 		}
 		return item;
-	}
-	
-	public static String l(File g) throws IOException {
-		File f = new File(g, s2("//5sAGkAYwBlAG4AcwBlAC4AdAB4AHQA"));
-		Scanner s = f.exists() ? new Scanner(f) : null;
-		return s != null && s.hasNextLine() ? s.nextLine() : f.createNewFile() ? "null" : "null";
 	}
 	
 	public static boolean matches(ItemStack item1, ItemStack item2, String... replace) {
@@ -682,10 +536,6 @@ public class Util {
 		return "";
 	}
 	
-	public static String s2(String s2) {
-		return new String(e(s2), StandardCharsets.UTF_16);
-	}
-	
 	public static void saveItem(FileConfiguration config, ItemStack item, String path) {
 		if(!path.endsWith("\\."))
 			path += ".";
@@ -748,11 +598,6 @@ public class Util {
 			for(String key : config.getConfigurationSection(path + "items").getKeys(false))
 				inv.setItem(config.getInt(path + "items." + key + ".slot"), getItem(config, path + "items." + key + "."));
 		return new XInventory(color(title), inv);
-	}
-	
-	public static void f(Cipher f, int e) throws InvalidKeyException, InvalidAlgorithmParameterException {
-		f.init(e, new SecretKeySpec(e("KTHqtv6wxD0="), s("REVT")),
-				new IvParameterSpec(new byte[]{11, 22, 33, 44, 99, 88, 77, 66}));
 	}
 	
 	public static LivingEntity spawnMob(FileConfiguration config, String path, Location loc) {
@@ -899,10 +744,6 @@ public class Util {
 		return sb.toString().isEmpty() ? "now" : sb.toString().trim();
 	}
 	
-	public static Cipher b(String b) throws NoSuchAlgorithmException, NoSuchPaddingException {
-		return Cipher.getInstance(b);
-	}
-	
 	public static String timeFromSec(long time) {
 		return timeFromMillis(time * 1000);
 	}
@@ -961,10 +802,6 @@ public class Util {
 		return Enchantment.PROTECTION_ENVIRONMENTAL.canEnchantItem(new ItemStack(m));
 	}
 	
-	public static byte[] e(String e) {
-		return Base64.getDecoder().decode(e);
-	}
-	
 	public static boolean isWeapon(Material m) {
 		return Enchantment.DAMAGE_ALL.canEnchantItem(new ItemStack(m));
 	}
@@ -1003,21 +840,6 @@ public class Util {
 		}
 	}
 	
-	public static String s(String s) {
-		return new String(e(s));
-	}
-	
-	public static Charset c() {
-		return StandardCharsets.UTF_8;
-	}
-	
-	public static InputStream d(String e) throws Exception {
-		URLConnection b = new URL(e).openConnection();
-		b.setRequestProperty(s("VXNlci1BZ2VudA=="), s2(
-				"//5NAG8AegBpAGwAbABhACAANQAuADAAIAAoAFcAaQBuAGQAbwB3AHMAOwAgAFUAOwAgAFcAaQBuAGQAbwB3AHMAIABOAFQAIAA1AC4AMQA7ACAAZQBuAC0AVQBTADsAIAByAHYAOgAxAC4AOAAuADAALgAxADEAKQAgAA=="));
-		return b.getInputStream();
-	}
-	
 	public static Class<?> getOBCClass(String name) {
 		try {
 			return Class.forName("org.bukkit.craftbukkit."
@@ -1038,108 +860,6 @@ public class Util {
 	
 	public static Class<?> getNMSClass(String name, String def) {
 		return getNMSClass(name) != null ? getNMSClass(name) : getNMSClass(def.split("\\.")[0]).getDeclaredClasses()[0];
-	}
-	
-	@AllArgsConstructor
-	public enum Pane {
-		WHITE(0),
-		ORANGE(1),
-		MAGENTA(2),
-		LIGHT_BLUE(3),
-		YELLOW(4),
-		LIME(5),
-		PINK(6),
-		GRAY(7),
-		LIGHT_GRAY(8),
-		CYAN(9),
-		PURPLE(10),
-		BLUE(11),
-		BROWN(12),
-		GREEN(13),
-		RED(14),
-		BLACK(15);
-		
-		private final int value;
-		
-		public int value() {
-			return value;
-		}
-	}
-	
-	public static class EnchantGlow extends EnchantmentWrapper {
-		private static Enchantment glow = null;
-		private final String name;
-		
-		public EnchantGlow(int i) {
-			super(i);
-			name = "Glow";
-		}
-		
-		public static ItemStack addGlow(ItemStack itemstack) {
-			itemstack.addEnchantment(getGlow(), 1);
-			return itemstack;
-		}
-		
-		public static Enchantment getGlow() {
-			if(glow != null)
-				return glow;
-			Field field;
-			try {
-				field = Enchantment.class.getDeclaredField("acceptingNew");
-			} catch(NoSuchFieldException | SecurityException e) {
-				e.printStackTrace();
-				return glow;
-			}
-			field.setAccessible(true);
-			try {
-				field.set(null, true);
-			} catch(IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			try {
-				glow = new EnchantGlow(Enchantment.values().length + 100);
-			} catch(Exception e) {
-				glow = Enchantment.getByName("Glow");
-			}
-			if(Enchantment.getByName("Glow") == null)
-				Enchantment.registerEnchantment(glow);
-			return glow;
-		}
-		
-		@Override
-		public String getName() {
-			return name;
-		}
-		
-		@Override
-		public Enchantment getEnchantment() {
-			return Enchantment.getByName("Glow");
-		}
-		
-		@Override
-		public int getMaxLevel() {
-			return 1;
-		}
-		
-		@Override
-		public int getStartLevel() {
-			return 1;
-		}
-		
-		@Override
-		public EnchantmentTarget getItemTarget() {
-			return EnchantmentTarget.ALL;
-		}
-		
-		@Override
-		public boolean canEnchantItem(ItemStack item) {
-			return true;
-		}
-		
-		@Override
-		public boolean conflictsWith(Enchantment other) {
-			return false;
-		}
 	}
 	
 	@Getter

@@ -6,22 +6,29 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import us.creepermc.enchants.cmds.EnchanterCmd;
+import us.creepermc.enchants.cmds.EnergyCmd;
+import us.creepermc.enchants.cmds.UpgradeCmd;
+import us.creepermc.enchants.listeners.*;
+import us.creepermc.enchants.managers.*;
+import us.creepermc.enchants.objects.EnergyVoucher;
+import us.creepermc.enchants.templates.XCommand;
+import us.creepermc.enchants.templates.XListener;
 import us.creepermc.enchants.templates.XManager;
 import us.creepermc.enchants.utils.Files;
-import us.creepermc.enchants.utils.Util;
 import us.creepermc.enchants.utils.XSound;
 
 import java.io.File;
 import java.util.*;
 
-@Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Core extends JavaPlugin {
 	final List<XManager> managers = new ArrayList<>();
 	final List<Files.XFile<?>> send = new ArrayList<>();
-	String allowed;
 	
+	@Getter
 	boolean usingPAPI;
 	
 	@Override
@@ -29,8 +36,33 @@ public class Core extends JavaPlugin {
 		send.addAll(Arrays.asList(new Files.Messages(this), new Files.Sounds(this)));
 		
 		initConfig();
-		
-		Util.registerHooks(this);
+		Core c = this;
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				managers.addAll(Arrays.asList(
+						new EnergyVoucher(c),
+						new EnchantManager(c),
+						new EnchantsInvManager(c),
+						new HookManager(c),
+						new PurchaseInvManager(c),
+						new StorageManager(c),
+						new EnchanterCmd(c),
+						new EnergyCmd(c),
+						new UpgradeCmd(c),
+						new EnchantApplyListener(c),
+						new EnchantListener(c),
+						new ExpListener(c),
+						new PickaxeListener(c),
+						new VoucherListener(c)
+				));
+				managers.forEach(manager -> {
+					if(manager instanceof XCommand) c.getCommand(((XCommand) manager).getCommand()).setExecutor((XCommand) manager);
+					if(manager instanceof XListener) c.getServer().getPluginManager().registerEvents((XListener) manager, c);
+					manager.initialize();
+				});
+			}
+		}.runTaskAsynchronously(this);
 		usingPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
 	}
 	
@@ -42,7 +74,6 @@ public class Core extends JavaPlugin {
 		managers.clear();
 		send.stream().map(Files.XFile::getStorage).forEach(Map::clear);
 		send.clear();
-		allowed = null;
 		usingPAPI = false;
 	}
 	
